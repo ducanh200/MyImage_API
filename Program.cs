@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,9 +13,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 string connectionString = builder.Configuration.GetConnectionString("API");
-/*builder.Services.AddDbContext<SEM3_API.Entities.Sem3ApiContext>(
+builder.Services.AddDbContext<MyImage_API.Entities.MyimageContext>(
         options => options.UseSqlServer(connectionString)
-    );*/
+    );
 
 
 var app = builder.Build();

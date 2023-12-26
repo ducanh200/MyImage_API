@@ -80,3 +80,4 @@ D:\Project_end_sem_3\MyImage_API\MyImage_API\obj\Debug\net7.0\refint\MyImage_API
 D:\Project_end_sem_3\MyImage_API\MyImage_API\obj\Debug\net7.0\MyImage_API.pdb
 D:\Project_end_sem_3\MyImage_API\MyImage_API\obj\Debug\net7.0\MyImage_API.genruntimeconfig.cache
 D:\Project_end_sem_3\MyImage_API\MyImage_API\obj\Debug\net7.0\ref\MyImage_API.dll
+D:\Project_end_sem_3\MyImage_API\MyImage_API\bin\Debug\net7.0\MyImage_API.staticwebassets.runtime.json

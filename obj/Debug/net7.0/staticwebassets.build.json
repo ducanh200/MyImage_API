@@ -1,11 +1,19 @@
 {
   "Version": 1,
-  "Hash": "aS5c+6rbIra1iq6r/Ewph1SjNy5w1qcXpVIASShrfDg=",
+  "Hash": "eNJAzMBkkZEYKG2J0SaXjupc23YEb8xpy9DZF/TiZOo=",
   "Source": "MyImage_API",
   "BasePath": "_content/MyImage_API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "MyImage_API\\wwwroot",
+      "Source": "MyImage_API",
+      "ContentRoot": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\",
+      "BasePath": "_content/MyImage_API",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }
