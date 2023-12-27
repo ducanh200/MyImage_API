@@ -4,7 +4,6 @@
     {
         public int id { get; set; }
         public int frame_amount { get; set; }
-        public string frame_color { get; set; }
         public string frame_name { get; set;}
 
     }

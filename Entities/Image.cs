@@ -9,17 +9,23 @@ public partial class Image
 
     public int FrameId { get; set; }
 
+    public int ColorId { get; set; }
+
+    public int MaterialId { get; set; }
+
     public int SizeId { get; set; }
 
     public int OrderId { get; set; }
 
-    public string Thumbnail { get; set; } = null!;
+    public string? Thumbnail { get; set; }
 
     public int Quantity { get; set; }
 
-    public string Material { get; set; } = null!;
+    public virtual Color Color { get; set; } = null!;
 
     public virtual Frame Frame { get; set; } = null!;
+
+    public virtual Material Material { get; set; } = null!;
 
     public virtual Order Order { get; set; } = null!;
 

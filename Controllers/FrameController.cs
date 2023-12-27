@@ -35,7 +35,6 @@ namespace MyImage_API.Controllers
                 {
                     id = n.Id,
                     frame_amount = n.FrameAmount,
-                    frame_color = n.FrameColor,
                     frame_name  = n.FrameName,
                 });
             }
@@ -55,7 +54,6 @@ namespace MyImage_API.Controllers
                 {
                     id=f.Id,
                     frame_amount = f.FrameAmount,
-                    frame_color = f.FrameColor,
                     frame_name = f.FrameName,
                 });
 
@@ -72,13 +70,12 @@ namespace MyImage_API.Controllers
             {
                 try
                 {
-                    Frame data = new Frame {FrameAmount = model.frame_amount,FrameColor = model.frame_color, FrameName = model.frame_name};
+                    Frame data = new Frame {FrameAmount = model.frame_amount, FrameName = model.frame_name};
                     _context.Frames.Add(data);
                     _context.SaveChanges();
                     return Created($"get-by-id?id={data.Id}",
                     new FrameDTO { id = data.Id,
                         frame_amount = data.FrameAmount,
-                        frame_color = data.FrameColor,
                         frame_name = data.FrameName 
                     });
                 }
@@ -101,7 +98,6 @@ namespace MyImage_API.Controllers
                 {
                     Frame frame = new Frame { Id = model.id,
                         FrameAmount = model.frame_amount,
-                        FrameColor = model.frame_color,
                         FrameName = model.frame_name
                     };
                     if (frame != null) 
@@ -117,6 +113,23 @@ namespace MyImage_API.Controllers
                 }
             }
             return BadRequest();
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                Frame frame = _context.Frames.Find(id);
+                if (frame == null)
+                    return NotFound();
+                _context.Frames.Remove(frame);
+                _context.SaveChanges();
+                return Ok("Đã xóa khung thành công !");
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
