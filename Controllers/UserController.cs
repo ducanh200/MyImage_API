@@ -79,8 +79,7 @@ namespace MyImage_API.Controllers
                     Phone = model.phone,
                     Address = model.address,
                     City = model.city,
-                    Password = hashed,
-                    Role = "user"
+                    Password = hashed
                 };
                 _context.Users.Add(user);
                 _context.SaveChanges();
@@ -97,7 +96,13 @@ namespace MyImage_API.Controllers
             }
             catch (Exception e)
             {
-                return Unauthorized(e.Message);
+                Console.WriteLine($"Lỗi: {e.Message}");
+                if (e.InnerException != null)
+                {
+                    Console.WriteLine($"Ngoại lệ nội bộ: {e.InnerException.Message}");
+                }
+
+                return Unauthorized("Đã xảy ra lỗi khi xử lý yêu cầu của bạn.");
             }
         }
 

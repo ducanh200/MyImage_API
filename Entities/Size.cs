@@ -11,9 +11,9 @@ public partial class Size
 
     public string SizeName { get; set; } = null!;
 
-    public int SizeWidth { get; set; }
+    public string SizeWidth { get; set; } = null!;
 
-    public int SizeHeight { get; set; }
+    public string SizeHeight { get; set; } = null!;
 
     public virtual ICollection<Image> Images { get; set; } = new List<Image>();
 }

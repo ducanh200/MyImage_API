@@ -11,5 +11,9 @@ public partial class Frame
 
     public string FrameName { get; set; } = null!;
 
+    public string FrameColorOutsite { get; set; } = null!;
+
+    public string FrameColorInsite { get; set; } = null!;
+
     public virtual ICollection<Image> Images { get; set; } = new List<Image>();
 }

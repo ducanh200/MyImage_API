@@ -2,36 +2,38 @@
 using Microsoft.AspNetCore.Mvc;
 using MyImage_API.DTOs;
 using MyImage_API.Entities;
-using MyImage_API.Models.Size;
+using MyImage_API.Models.Material;
 
 namespace MyImage_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SizeController : ControllerBase
+    public class MaterialController : ControllerBase
     {
         private readonly MyimageContext _context;
-
-        public SizeController(MyimageContext context)
+        private readonly IWebHostEnvironment _environment;
+        public MaterialController(MyimageContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
+
 
         [HttpGet]
 
         public IActionResult Index()
         {
-            List<Size> sizes = _context.Sizes.ToList();
-            if(sizes.Count == 0)
+            List<Material> materials = _context.Materials.ToList();
+            if (materials.Count == 0)
             {
                 return Ok("Không có dữ liệu nào được ghi !");
             }
-            List<SizeDTO> data = new List<SizeDTO>();
-            foreach (Size s in sizes)
+            List<MaterialDTO> data = new List<MaterialDTO>();
+            foreach (Material m in materials)
             {
-                data.Add(new SizeDTO { id = s.Id, size_name = s.SizeName, size_amount = s.SizeAmount, size_width = s.SizeWidth, size_height = s.SizeHeight });
+                data.Add(new MaterialDTO { id = m.Id, material_amount = m.MaterialAmount, material_name = m.MaterialName });
             }
-            return Ok(sizes);
+            return Ok(materials);
         }
 
 
@@ -41,10 +43,10 @@ namespace MyImage_API.Controllers
         {
             try
             {
-                Size s = _context.Sizes.Find(id);
-                if (s != null)
+                Material m = _context.Materials.Find(id);
+                if (m != null)
                 {
-                    return Ok(new SizeDTO { id = s.Id, size_name = s.SizeName, size_amount = s.SizeAmount, size_width = s.SizeWidth,size_height = s.SizeHeight });
+                    return Ok(new MaterialDTO { id = m.Id, material_amount = m.MaterialAmount, material_name = m.MaterialName });
                 }
             }
             catch (Exception ex)
@@ -56,17 +58,26 @@ namespace MyImage_API.Controllers
 
 
         [HttpPost]
-        public IActionResult Create(CreateSize model)
+        public IActionResult Create(CreateMaterial model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Size data = new Size { SizeName = model.size_name,SizeAmount = model.size_amount,SizeWidth = model.size_width,SizeHeight = model.size_height };
-                    _context.Sizes.Add(data);
+                    Material data = new Material
+                    { 
+                        MaterialAmount = model.material_amount, 
+                        MaterialName = model.material_name
+                    };
+                    _context.Materials.Add(data);
                     _context.SaveChanges();
                     return Created($"get-by-id?id={data.Id}",
-                    new SizeDTO { id = data.Id, size_name = data.SizeName, size_amount = data.SizeAmount, size_width = data.SizeWidth, size_height = data.SizeHeight });
+                    new MaterialDTO 
+                    { 
+                        id = data.Id, 
+                        material_amount = data.MaterialAmount, 
+                        material_name = data.MaterialName
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -79,16 +90,16 @@ namespace MyImage_API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(EditSize model)
+        public IActionResult Update(EditMaterial model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Size size = new Size { Id = model.id, SizeName = model.size_name, SizeAmount = model.size_amount, SizeWidth = model.size_width, SizeHeight = model.size_height };
-                    if (size != null)
+                    Material material = new Material { Id = model.id, MaterialAmount = model.material_amount, MaterialName = model.material_name};
+                    if (material != null)
                     {
-                        _context.Sizes.Update(size);
+                        _context.Materials.Update(material);
                         _context.SaveChanges();
                         return Ok("Đổi thành công tên danh mục!");
                     }
@@ -101,16 +112,15 @@ namespace MyImage_API.Controllers
             return BadRequest();
         }
 
-
         [HttpDelete]
         public IActionResult Delete(int id)
         {
             try
             {
-                Size size = _context.Sizes.Find(id);
-                if (size == null)
+                Material material = _context.Materials.Find(id);
+                if (material == null)
                     return NotFound();
-                _context.Sizes.Remove(size);
+                _context.Materials.Remove(material);
                 _context.SaveChanges();
                 return Ok("Đã xóa thành công");
             }

@@ -36,6 +36,8 @@ namespace MyImage_API.Controllers
                     id = n.Id,
                     frame_amount = n.FrameAmount,
                     frame_name  = n.FrameName,
+                    frame_color_outsite = n.FrameColorOutsite,
+                    frame_color_insite = n.FrameColorInsite,
                 });
             }
             return Ok(data);
@@ -55,6 +57,8 @@ namespace MyImage_API.Controllers
                     id=f.Id,
                     frame_amount = f.FrameAmount,
                     frame_name = f.FrameName,
+                    frame_color_outsite=f.FrameColorOutsite,
+                    frame_color_insite=f.FrameColorInsite,
                 });
 
             }catch(Exception ex)
@@ -70,13 +74,18 @@ namespace MyImage_API.Controllers
             {
                 try
                 {
-                    Frame data = new Frame {FrameAmount = model.frame_amount, FrameName = model.frame_name};
+                    Frame data = new Frame {FrameAmount = model.frame_amount, FrameName = model.frame_name, FrameColorOutsite = model.frame_color_outsite, FrameColorInsite = model.frame_color_insite};
                     _context.Frames.Add(data);
                     _context.SaveChanges();
                     return Created($"get-by-id?id={data.Id}",
-                    new FrameDTO { id = data.Id,
+                    new FrameDTO 
+                    { 
+                        id = data.Id,
                         frame_amount = data.FrameAmount,
-                        frame_name = data.FrameName 
+                        frame_name = data.FrameName,
+                        frame_color_outsite = data.FrameColorOutsite,
+                        frame_color_insite = data.FrameColorInsite
+
                     });
                 }
                 catch (Exception ex)
@@ -96,9 +105,13 @@ namespace MyImage_API.Controllers
             {
                 try
                 {
-                    Frame frame = new Frame { Id = model.id,
+                    Frame frame = new Frame { 
+                        Id = model.id,
                         FrameAmount = model.frame_amount,
-                        FrameName = model.frame_name
+                        FrameName = model.frame_name,
+                        FrameColorOutsite = model.frame_color_outsite,
+                        FrameColorInsite=model.frame_color_insite   
+
                     };
                     if (frame != null) 
                     { 

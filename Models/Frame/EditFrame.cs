@@ -13,6 +13,11 @@ namespace MyImage_API.Models.Frame
         [Required(ErrorMessage = "Vui lòng nhập tên danh mục !")]
         public string frame_name { get; set; }
 
+        [Required]
+        public string frame_color_outsite { get; set; }
+
+        [Required]
+        public string frame_color_insite { get; set; }
 
     }
 }
