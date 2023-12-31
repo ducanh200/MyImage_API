@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "eNJAzMBkkZEYKG2J0SaXjupc23YEb8xpy9DZF/TiZOo=",
+  "Hash": "+s42IxDSLG4OzVru04R5R6K54Ff65lIbZAcPl8Lw+Ew=",
   "Source": "MyImage_API",
   "BasePath": "_content/MyImage_API",
   "Mode": "Default",
@@ -15,5 +15,57 @@
       "Pattern": "**"
     }
   ],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\Uploads\\ad0275c1-f23f-4608-bcc9-883b4a7630ff.jpg",
+      "SourceId": "MyImage_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\",
+      "BasePath": "_content/MyImage_API",
+      "RelativePath": "Uploads/ad0275c1-f23f-4608-bcc9-883b4a7630ff.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\ad0275c1-f23f-4608-bcc9-883b4a7630ff.jpg"
+    },
+    {
+      "Identity": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\Uploads\\b6dc20f6-2c3d-49e8-a38a-a176beb5d06b.jpg",
+      "SourceId": "MyImage_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\",
+      "BasePath": "_content/MyImage_API",
+      "RelativePath": "Uploads/b6dc20f6-2c3d-49e8-a38a-a176beb5d06b.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\b6dc20f6-2c3d-49e8-a38a-a176beb5d06b.jpg"
+    },
+    {
+      "Identity": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\Uploads\\c4f28462-505f-48f8-af4b-b7d59eed42d1.jpg",
+      "SourceId": "MyImage_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\",
+      "BasePath": "_content/MyImage_API",
+      "RelativePath": "Uploads/c4f28462-505f-48f8-af4b-b7d59eed42d1.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\c4f28462-505f-48f8-af4b-b7d59eed42d1.jpg"
+    }
+  ]
 }

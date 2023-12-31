@@ -13,7 +13,7 @@ public partial class Image
 
     public int SizeId { get; set; }
 
-    public int OrderId { get; set; }
+    public int? OrderId { get; set; }
 
     public string Thumbnail { get; set; } = null!;
 
@@ -23,7 +23,7 @@ public partial class Image
 
     public virtual Material Material { get; set; } = null!;
 
-    public virtual Order Order { get; set; } = null!;
+    public virtual Order? Order { get; set; }
 
     public virtual Size Size { get; set; } = null!;
 }

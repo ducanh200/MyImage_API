@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\Uploads\\ad0275c1-f23f-4608-bcc9-883b4a7630ff.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\ad0275c1-f23f-4608-bcc9-883b4a7630ff.jpg"
+    },
+    {
+      "Id": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\Uploads\\b6dc20f6-2c3d-49e8-a38a-a176beb5d06b.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\b6dc20f6-2c3d-49e8-a38a-a176beb5d06b.jpg"
+    },
+    {
+      "Id": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\Uploads\\c4f28462-505f-48f8-af4b-b7d59eed42d1.jpg",
+      "PackagePath": "staticwebassets\\Uploads\\c4f28462-505f-48f8-af4b-b7d59eed42d1.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.MyImage_API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.MyImage_API.props",
+      "PackagePath": "build\\MyImage_API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.MyImage_API.props",
+      "PackagePath": "buildMultiTargeting\\MyImage_API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.MyImage_API.props",
+      "PackagePath": "buildTransitive\\MyImage_API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
