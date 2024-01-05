@@ -21,11 +21,11 @@ public partial class MyimageContext : DbContext
 
     public virtual DbSet<Frame> Frames { get; set; }
 
-    public virtual DbSet<Image> Images { get; set; }
-
-    public virtual DbSet<Material> Materials { get; set; }
+    public virtual DbSet<Hanger> Hangers { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<OrderImage> OrderImages { get; set; }
 
     public virtual DbSet<Size> Sizes { get; set; }
 
@@ -39,9 +39,11 @@ public partial class MyimageContext : DbContext
     {
         modelBuilder.Entity<Admin>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__admin__3213E83F4E9EF0EA");
+            entity.HasKey(e => e.Id).HasName("PK__admin__3213E83FC78D6764");
 
             entity.ToTable("admin");
+
+            entity.HasIndex(e => e.Email, "UQ__admin__AB6E61641AAEFD11").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Email)
@@ -57,9 +59,9 @@ public partial class MyimageContext : DbContext
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__feedback__3213E83FDFCCC6AC");
+            entity.HasKey(e => e.Id).HasName("PK__feedback__3213E83F35EC7A54");
 
-            entity.ToTable("feedback");
+            entity.ToTable("feedbacks");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreatedAt)
@@ -74,14 +76,14 @@ public partial class MyimageContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__feedback__user_i__498EEC8D");
+                .HasConstraintName("FK__feedbacks__user___56B3DD81");
         });
 
         modelBuilder.Entity<Frame>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__frame__3213E83F65B4AE72");
+            entity.HasKey(e => e.Id).HasName("PK__frames__3213E83F655EBFA4");
 
-            entity.ToTable("frame");
+            entity.ToTable("frames");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.FrameAmount).HasColumnName("frame_amount");
@@ -96,15 +98,63 @@ public partial class MyimageContext : DbContext
                 .HasColumnName("frame_name");
         });
 
-        modelBuilder.Entity<Image>(entity =>
+        modelBuilder.Entity<Hanger>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__images__3213E83FA6A54C7E");
+            entity.HasKey(e => e.Id).HasName("PK__hangers__3213E83FFB64D7F6");
 
-            entity.ToTable("images");
+            entity.ToTable("hangers");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.HangerAmount).HasColumnName("hanger_amount");
+            entity.Property(e => e.HangerName)
+                .HasMaxLength(255)
+                .HasColumnName("hanger_name");
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83FCB3C9510");
+
+            entity.ToTable("orders");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Address)
+                .HasMaxLength(255)
+                .HasColumnName("address");
+            entity.Property(e => e.City)
+                .HasMaxLength(255)
+                .HasColumnName("city");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime")
+                .HasColumnName("created_at");
+            entity.Property(e => e.FeedbackId).HasColumnName("feedback_id");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(25)
+                .HasColumnName("phone");
+            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.TotalAmount).HasColumnName("total_amount");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Feedback).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.FeedbackId)
+                .HasConstraintName("FK__orders__feedback__589C25F3");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__orders__user_id__57A801BA");
+        });
+
+        modelBuilder.Entity<OrderImage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__order_im__3213E83FBEAE7C10");
+
+            entity.ToTable("order_images");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Amount).HasColumnName("amount");
             entity.Property(e => e.FrameId).HasColumnName("frame_id");
-            entity.Property(e => e.MaterialId).HasColumnName("material_id");
+            entity.Property(e => e.HangerId).HasColumnName("hanger_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
             entity.Property(e => e.SizeId).HasColumnName("size_id");
@@ -112,70 +162,31 @@ public partial class MyimageContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("thumbnail");
 
-            entity.HasOne(d => d.Frame).WithMany(p => p.Images)
+            entity.HasOne(d => d.Frame).WithMany(p => p.OrderImages)
                 .HasForeignKey(d => d.FrameId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__images__frame_id__4C6B5938");
+                .HasConstraintName("FK__order_ima__frame__59904A2C");
 
-            entity.HasOne(d => d.Material).WithMany(p => p.Images)
-                .HasForeignKey(d => d.MaterialId)
+            entity.HasOne(d => d.Hanger).WithMany(p => p.OrderImages)
+                .HasForeignKey(d => d.HangerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__images__material__4F47C5E3");
+                .HasConstraintName("FK__order_ima__hange__5A846E65");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.Images)
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderImages)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK__images__order_id__4E53A1AA");
+                .HasConstraintName("FK__order_ima__order__5C6CB6D7");
 
-            entity.HasOne(d => d.Size).WithMany(p => p.Images)
+            entity.HasOne(d => d.Size).WithMany(p => p.OrderImages)
                 .HasForeignKey(d => d.SizeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__images__size_id__4D5F7D71");
-        });
-
-        modelBuilder.Entity<Material>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__material__3213E83FC946799E");
-
-            entity.ToTable("material");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.MaterialAmount).HasColumnName("material_amount");
-            entity.Property(e => e.MaterialName)
-                .HasMaxLength(255)
-                .HasColumnName("material_name");
-        });
-
-        modelBuilder.Entity<Order>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__order__3213E83FAF81CF06");
-
-            entity.ToTable("order");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnType("datetime")
-                .HasColumnName("created_at");
-            entity.Property(e => e.FeedbackId).HasColumnName("feedback_id");
-            entity.Property(e => e.Status).HasColumnName("status");
-            entity.Property(e => e.TotalAmount).HasColumnName("total_amount");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-
-            entity.HasOne(d => d.Feedback).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.FeedbackId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__order__feedback___4B7734FF");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__order__user_id__4A8310C6");
+                .HasConstraintName("FK__order_ima__size___5B78929E");
         });
 
         modelBuilder.Entity<Size>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__size__3213E83FE812D76F");
+            entity.HasKey(e => e.Id).HasName("PK__sizes__3213E83F73A6A855");
 
-            entity.ToTable("size");
+            entity.ToTable("sizes");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.SizeAmount).HasColumnName("size_amount");
@@ -192,9 +203,11 @@ public partial class MyimageContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F8D241D7F");
+            entity.HasKey(e => e.Id).HasName("PK__users__3213E83FEFAA72AE");
 
             entity.ToTable("users");
+
+            entity.HasIndex(e => e.Email, "UQ__users__AB6E61648AC4BF03").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Address)
@@ -213,10 +226,10 @@ public partial class MyimageContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("password");
             entity.Property(e => e.Phone)
-                .HasMaxLength(20)
+                .HasMaxLength(25)
                 .HasColumnName("phone");
             entity.Property(e => e.Role)
-                .HasMaxLength(20)
+                .HasMaxLength(255)
                 .HasColumnName("role");
         });
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MyImage_API.DTOs;
 using MyImage_API.Entities;
+using MyImage_API.Models.Admin;
 using MyImage_API.Models.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,17 +13,17 @@ namespace MyImage_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class AdminController : ControllerBase
     {
         private readonly MyimageContext _context;
         private readonly IConfiguration _config;
-        public UserController(MyimageContext context, IConfiguration config)
+        public AdminController(MyimageContext context, IConfiguration config)
         {
             _context = context;
             _config = config;
         }
 
-        private string GenJWT(User user)
+        private string GenJWT(Admin admin)
         {
             var secretkey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_config["JWT:Key"]));
@@ -30,10 +31,9 @@ namespace MyImage_API.Controllers
                                     SecurityAlgorithms.HmacSha256);
             var payload = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-                new Claim(ClaimTypes.Email,user.Email),
-                new Claim(ClaimTypes.Name,user.Name),
-                new Claim(ClaimTypes.Role,"user"),
+                new Claim(ClaimTypes.NameIdentifier,admin.Id.ToString()),
+                new Claim(ClaimTypes.Email,admin.Email),
+                new Claim(ClaimTypes.Name,admin.Name),
 
             };
             var token = new JwtSecurityToken(
@@ -50,48 +50,42 @@ namespace MyImage_API.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<User> users = _context.Users.ToList();
-            if (users.Count == 0)
+            List<Admin> admins = _context.Admins.ToList();
+            if (admins.Count == 0)
             {
                 return Ok("Không có tài khoản nào kho lưu trữ thông tin khách hàng !");
             }
-            List<UserDTO> data = new List<UserDTO>();
-            foreach (User c in users)
+            List<AdminDTO> data = new List<AdminDTO>();
+            foreach (Admin c in admins)
             {
-                data.Add(new UserDTO { id = c.Id, name = c.Name, email = c.Email, phone = c.Phone, address = c.Address, city = c.City });
+                data.Add(new AdminDTO { id = c.Id, name = c.Name, email = c.Email});
             }
-            return Ok(users);
+            return Ok(admins);
         }
 
 
         [HttpPost]
         [Route("register")]
-        public IActionResult Register(UserRegister model)
+        public IActionResult Register(AdminRegister model)
         {
             try
             {
                 var saft = BCrypt.Net.BCrypt.GenerateSalt(10);
                 var hashed = BCrypt.Net.BCrypt.HashPassword(model.password, saft);
-                var user = new User
+                var admin = new Admin
                 {
                     Name = model.name,
                     Email = model.email,
-                    Phone = model.phone,
-                    Address = model.address,
-                    City = model.city,
                     Password = hashed
                 };
-                _context.Users.Add(user);
+                _context.Admins.Add(admin);
                 _context.SaveChanges();
-                return Ok(new UserDTO
+                return Ok(new AdminDTO
                 {
-                    id = user.Id,
-                    email = user.Email,
-                    name = user.Name,
-                    phone = user.Phone,
-                    city = user.City,
-                    address = user.Address,
-                    token = GenJWT(user)
+                    id = admin.Id,
+                    email = admin.Email,
+                    name = admin.Name,
+                    token = GenJWT(admin)
                 });
             }
             catch (Exception e)
@@ -108,30 +102,27 @@ namespace MyImage_API.Controllers
 
         [HttpPost]
         [Route("login")]
-        public IActionResult Login(UserLogin model)
+        public IActionResult Login(AdminLogin model)
         {
             try
             {
-                var user = _context.Users.Where(u => u.Email.Equals(model.email))
+                var admin = _context.Admins.Where(u => u.Email.Equals(model.email))
                             .First();
-                if (user == null)
+                if (admin == null)
                 {
                     throw new Exception("Email or Password is not correct");
                 }
-                bool verified = BCrypt.Net.BCrypt.Verify(model.password, user.Password);
+                bool verified = BCrypt.Net.BCrypt.Verify(model.password, admin.Password);
                 if (!verified)
                 {
                     throw new Exception("Email or Password is not correct");
                 }
-                return Ok(new UserDTO
+                return Ok(new AdminDTO
                 {
-                    id = user.Id,
-                    name = user.Name,
-                    email = user.Email,
-                    phone = user.Phone,
-                    address = user.Address,
-                    city = user.City,
-                    token = GenJWT(user)
+                    id = admin.Id,
+                    name = admin.Name,
+                    email = admin.Email,
+                    token = GenJWT(admin)
                 });
 
             }
@@ -153,18 +144,15 @@ namespace MyImage_API.Controllers
             }
             try
             {
-                var userClaims = identity.Claims;
-                var userId = userClaims.FirstOrDefault(c =>
+                var adminClaims = identity.Claims;
+                var adminId = adminClaims.FirstOrDefault(c =>
                     c.Type == ClaimTypes.NameIdentifier)?.Value;
-                var user = _context.Users.FirstOrDefault(c => c.Id == Convert.ToInt32(userId));
-                return Ok(new UserDTO // đúng ra phải là UserProfileDTO
+                var admin = _context.Users.FirstOrDefault(c => c.Id == Convert.ToInt32(adminId));
+                return Ok(new AdminDTO // đúng ra phải là UserProfileDTO
                 {
-                    id = user.Id,
-                    email = user.Email,
-                    name = user.Name,
-                    phone = user.Phone,
-                    city = user.City,
-                    address = user.Address
+                    id = admin.Id,
+                    email = admin.Email,
+                    name = admin.Name,
                 });
             }
             catch (Exception e)
@@ -174,3 +162,4 @@ namespace MyImage_API.Controllers
         }
     }
 }
+

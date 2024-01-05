@@ -2,17 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using MyImage_API.DTOs;
 using MyImage_API.Entities;
-using MyImage_API.Models.Material;
+using MyImage_API.Models.Hanger;
 
 namespace MyImage_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MaterialController : ControllerBase
+    public class HangerController : ControllerBase
     {
         private readonly MyimageContext _context;
         private readonly IWebHostEnvironment _environment;
-        public MaterialController(MyimageContext context, IWebHostEnvironment environment)
+        public HangerController(MyimageContext context, IWebHostEnvironment environment)
         {
             _context = context;
             _environment = environment;
@@ -23,17 +23,17 @@ namespace MyImage_API.Controllers
 
         public IActionResult Index()
         {
-            List<Material> materials = _context.Materials.ToList();
-            if (materials.Count == 0)
+            List<Hanger> hangers = _context.Hangers.ToList();
+            if (hangers.Count == 0)
             {
                 return Ok("Không có dữ liệu nào được ghi !");
             }
-            List<MaterialDTO> data = new List<MaterialDTO>();
-            foreach (Material m in materials)
+            List<HangerDTO> data = new List<HangerDTO>();
+            foreach (Hanger m in hangers)
             {
-                data.Add(new MaterialDTO { id = m.Id, material_amount = m.MaterialAmount, material_name = m.MaterialName });
+                data.Add(new HangerDTO { id = m.Id, hanger_amount = m.HangerAmount, hanger_name = m.HangerName });
             }
-            return Ok(materials);
+            return Ok(hangers);
         }
 
 
@@ -43,10 +43,10 @@ namespace MyImage_API.Controllers
         {
             try
             {
-                Material m = _context.Materials.Find(id);
+                Hanger m = _context.Hangers.Find(id);
                 if (m != null)
                 {
-                    return Ok(new MaterialDTO { id = m.Id, material_amount = m.MaterialAmount, material_name = m.MaterialName });
+                    return Ok(new HangerDTO { id = m.Id, hanger_amount = m.HangerAmount, hanger_name = m.HangerName });
                 }
             }
             catch (Exception ex)
@@ -58,25 +58,25 @@ namespace MyImage_API.Controllers
 
 
         [HttpPost]
-        public IActionResult Create(CreateMaterial model)
+        public IActionResult Create(CreateHanger model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Material data = new Material
-                    { 
-                        MaterialAmount = model.material_amount, 
-                        MaterialName = model.material_name
+                    Hanger data = new Hanger
+                    {
+                        HangerAmount = model.hanger_amount,
+                        HangerName = model.hanger_name
                     };
-                    _context.Materials.Add(data);
+                    _context.Hangers.Add(data);
                     _context.SaveChanges();
                     return Created($"get-by-id?id={data.Id}",
-                    new MaterialDTO 
-                    { 
-                        id = data.Id, 
-                        material_amount = data.MaterialAmount, 
-                        material_name = data.MaterialName
+                    new HangerDTO
+                    {
+                        id = data.Id,
+                        hanger_amount = data.HangerAmount,
+                        hanger_name = data.HangerName
                     });
                 }
                 catch (Exception ex)
@@ -90,16 +90,16 @@ namespace MyImage_API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(EditMaterial model)
+        public IActionResult Update(EditHanger model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Material material = new Material { Id = model.id, MaterialAmount = model.material_amount, MaterialName = model.material_name};
-                    if (material != null)
+                    Hanger hanger = new Hanger { Id = model.id, HangerAmount = model.hanger_amount, HangerName = model.hanger_name };
+                    if (hanger != null)
                     {
-                        _context.Materials.Update(material);
+                        _context.Hangers.Update(hanger);
                         _context.SaveChanges();
                         return Ok("Đổi thành công tên danh mục!");
                     }
@@ -117,10 +117,10 @@ namespace MyImage_API.Controllers
         {
             try
             {
-                Material material = _context.Materials.Find(id);
-                if (material == null)
+                Hanger hanger = _context.Hangers.Find(id);
+                if (hanger == null)
                     return NotFound();
-                _context.Materials.Remove(material);
+                _context.Hangers.Remove(hanger);
                 _context.SaveChanges();
                 return Ok("Đã xóa thành công");
             }
@@ -131,3 +131,4 @@ namespace MyImage_API.Controllers
         }
     }
 }
+

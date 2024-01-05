@@ -8,7 +8,7 @@ namespace MyImage_API.Models.Image
         public int frame_id { get; set; }
 
         [Required(ErrorMessage = "Vui lòng nhập dữ liệu bắt buộc !")]
-        public int material_id { get; set; }
+        public int hanger_id { get; set; }
 
         [Required(ErrorMessage = "Vui lòng nhập dữ liệu bắt buộc !")]
         public int size_id { get; set; }
@@ -18,6 +18,9 @@ namespace MyImage_API.Models.Image
 
         [Required(ErrorMessage = "Vui lòng nhập số lượng ảnh !")]
         public int quantity { get; set; }
+
+        [Required(ErrorMessage = "Vui lòng nhập số tiền!")]
+        public int amount { get; set; }
 
     }
 }

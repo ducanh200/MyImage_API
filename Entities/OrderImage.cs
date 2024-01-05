@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace MyImage_API.Entities;
 
-public partial class Image
+public partial class OrderImage
 {
     public int Id { get; set; }
 
     public int FrameId { get; set; }
 
-    public int MaterialId { get; set; }
+    public int HangerId { get; set; }
 
     public int SizeId { get; set; }
 
@@ -19,9 +19,11 @@ public partial class Image
 
     public int Quantity { get; set; }
 
+    public int Amount { get; set; }
+
     public virtual Frame Frame { get; set; } = null!;
 
-    public virtual Material Material { get; set; } = null!;
+    public virtual Hanger Hanger { get; set; } = null!;
 
     public virtual Order? Order { get; set; }
 

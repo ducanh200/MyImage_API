@@ -9,11 +9,11 @@ namespace MyImage_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ImageController : ControllerBase
+    public class OrderImageController : ControllerBase
     {
         private readonly MyimageContext _context;
         private readonly IWebHostEnvironment _environment;
-        public ImageController(MyimageContext context, IWebHostEnvironment environment)
+        public OrderImageController(MyimageContext context, IWebHostEnvironment environment)
         {
             _context = context;
             _environment = environment;
@@ -23,23 +23,27 @@ namespace MyImage_API.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Image> images = _context.Images.Include(p => p.Size).Include(p => p.Frame).Include(p => p.Material).ToList();
-            if(images.Count == 0)
+            List<OrderImage> orderImages = _context.OrderImages.Include(p => p.Size).Include(p => p.Frame).Include(p => p.Hanger).ToList();
+            if (orderImages.Count == 0)
             {
                 return Ok("Không dữ liệu !");
             }
-            List<ImageDTO> data = new List<ImageDTO>();
-            foreach (Image n in images)
+            List<OrderImageDTO> data = new List<OrderImageDTO>();
+            foreach (OrderImage n in orderImages)
             {
-                data.Add(new ImageDTO
+                data.Add(new OrderImageDTO
                 {
                     id = n.Id,
                     frame_id = n.FrameId,
-                    material_id = n.MaterialId,
+                    frame = new FrameDTO { id = n.Frame.Id, frame_amount = n.Frame.FrameAmount, frame_name = n.Frame.FrameName, frame_color_outsite = n.Frame.FrameColorOutsite, frame_color_insite = n.Frame.FrameColorInsite },
+                    hanger_id = n.HangerId,
+                    hanger = new HangerDTO { id = n.Hanger.Id, hanger_amount = n.Hanger.HangerAmount, hanger_name = n.Hanger.HangerName },
                     size_id = n.SizeId,
+                    size = new SizeDTO { id = n.Size.Id, size_amount = n.Size.SizeAmount, size_name = n.Size.SizeName, size_width = n.Size.SizeWidth, size_height = n.Size.SizeHeight },
                     thumbnail = n.Thumbnail,
                     quantity = n.Quantity,
-                }); 
+                    amount = n.Amount,
+                });
             }
             return Ok(data);
 
@@ -51,17 +55,18 @@ namespace MyImage_API.Controllers
         {
             try
             {
-                Image i = _context.Images.Where(i => i.Id == id).First();
+                OrderImage i = _context.OrderImages.Where(i => i.Id == id).First();
                 if (i == null)
                     return NotFound();
-                return Ok(new ImageDTO
+                return Ok(new OrderImageDTO
                 {
                     id = i.Id,
                     frame_id = i.FrameId,
-                    material_id = i.MaterialId,
+                    hanger_id = i.HangerId,
                     size_id = i.SizeId,
                     thumbnail = i.Thumbnail,
                     quantity = i.Quantity,
+                    amount = i.Amount,
                 });
 
             }
@@ -73,13 +78,13 @@ namespace MyImage_API.Controllers
 
 
         [HttpPost]
-        public IActionResult Create([FromForm] CreateImage model )
+        public IActionResult Create([FromForm] CreateImage model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    if(model.thumbnail != null && model.thumbnail.Length >0)
+                    if (model.thumbnail != null && model.thumbnail.Length > 0)
                     {
                         var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
                         var filePath = Path.Combine("uploads", fileName);
@@ -94,39 +99,42 @@ namespace MyImage_API.Controllers
                         string url = $"{Request.Scheme}://{Request.Host}/uploads/{fileName}";
 
                         var frame = _context.Frames.Find(model.frame_id);
-                        var material = _context.Materials.Find(model.material_id);
+                        var hanger = _context.Hangers.Find(model.hanger_id);
                         var size = _context.Sizes.Find(model.size_id);
 
-                        Image image = new Image
+                        OrderImage image = new OrderImage
                         {
                             FrameId = model.frame_id,
-                            MaterialId = model.material_id,
+                            HangerId = model.hanger_id,
                             SizeId = model.size_id,
                             Thumbnail = url,
                             Quantity = model.quantity,
+                            Amount = model.amount,
                         };
 
-                        _context.Images.Add(image);
+                        _context.OrderImages.Add(image);
                         _context.SaveChanges();
 
-                        ImageDTO imageDTO = new ImageDTO
+                        OrderImageDTO orderImageDTO = new OrderImageDTO
                         {
                             id = image.Id,
                             frame_id = image.FrameId,
-                            material_id = image.MaterialId,
+                            hanger_id = image.HangerId,
                             size_id = image.SizeId,
                             thumbnail = image.Thumbnail,
                             quantity = image.Quantity,
+                            amount = image.Amount,
                         };
 
-                        return Created(url, imageDTO);
+                        return Created(url, orderImageDTO);
                     }
                     else
                     {
                         return BadRequest("Vui lòng chọn file ảnh");
                     }
 
-                }catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -145,11 +153,11 @@ namespace MyImage_API.Controllers
                 try
                 {
                     // Tìm kiếm bản ghi News để cập nhật
-                    Image existingImage = _context.Images.Find(model.id);
+                    OrderImage existingImage = _context.OrderImages.Find(model.id);
 
                     if (existingImage == null)
                     {
-                        return NotFound("Không tìm thấy bài báo cần sửa");
+                        return NotFound("Không tìm thấy ảnh cần sửa");
                     }
 
                     // Kiểm tra xem model có chứa ảnh mới hay không
@@ -183,14 +191,15 @@ namespace MyImage_API.Controllers
 
                     // Cập nhật các thuộc tính khác từ model
                     existingImage.FrameId = model.frame_id;
-                    existingImage.MaterialId = model.material_id;
+                    existingImage.HangerId = model.hanger_id;
                     existingImage.SizeId = model.size_id;
                     existingImage.Quantity = model.quantity;
+                    existingImage.Amount = model.amount;
 
                     // Lưu thay đổi vào cơ sở dữ liệu
                     _context.SaveChanges();
 
-                    return Ok("Đã sửa bài báo thành công!");
+                    return Ok("Đã sửa thành công!");
                 }
                 catch (Exception ex)
                 {
@@ -206,14 +215,15 @@ namespace MyImage_API.Controllers
         {
             try
             {
-                Image image = _context.Images.Find(id);
+                OrderImage image = _context.OrderImages.Find(id);
                 if (image == null)
                     return NotFound();
-                _context.Images.Remove(image);
+                _context.OrderImages.Remove(image);
                 _context.SaveChanges();
                 return Ok("Deleted");
 
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

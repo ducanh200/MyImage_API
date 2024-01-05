@@ -22,7 +22,7 @@ namespace MyImage_API.Controllers
         public IActionResult Index()
         {
             List<Size> sizes = _context.Sizes.ToList();
-            if(sizes.Count == 0)
+            if (sizes.Count == 0)
             {
                 return Ok("Không có dữ liệu nào được ghi !");
             }
@@ -44,7 +44,7 @@ namespace MyImage_API.Controllers
                 Size s = _context.Sizes.Find(id);
                 if (s != null)
                 {
-                    return Ok(new SizeDTO { id = s.Id, size_name = s.SizeName, size_amount = s.SizeAmount, size_width = s.SizeWidth,size_height = s.SizeHeight });
+                    return Ok(new SizeDTO { id = s.Id, size_name = s.SizeName, size_amount = s.SizeAmount, size_width = s.SizeWidth, size_height = s.SizeHeight });
                 }
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace MyImage_API.Controllers
             {
                 try
                 {
-                    Size data = new Size { SizeName = model.size_name,SizeAmount = model.size_amount,SizeWidth = model.size_width,SizeHeight = model.size_height };
+                    Size data = new Size { SizeName = model.size_name, SizeAmount = model.size_amount, SizeWidth = model.size_width, SizeHeight = model.size_height };
                     _context.Sizes.Add(data);
                     _context.SaveChanges();
                     return Created($"get-by-id?id={data.Id}",

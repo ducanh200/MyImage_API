@@ -28,14 +28,14 @@ namespace MyImage_API.Controllers
             {
                 return BadRequest("Không có khung trong cơ sở dữ liệu!");
             }
-            List<FrameDTO> data= new List <FrameDTO>();
+            List<FrameDTO> data = new List<FrameDTO>();
             foreach (Frame n in frames)
             {
                 data.Add(new FrameDTO
                 {
                     id = n.Id,
                     frame_amount = n.FrameAmount,
-                    frame_name  = n.FrameName,
+                    frame_name = n.FrameName,
                     frame_color_outsite = n.FrameColorOutsite,
                     frame_color_insite = n.FrameColorInsite,
                 });
@@ -45,7 +45,7 @@ namespace MyImage_API.Controllers
 
         [HttpGet]
         [Route("get-by-id")]
-        public IActionResult Get(int id) 
+        public IActionResult Get(int id)
         {
             try
             {
@@ -54,14 +54,15 @@ namespace MyImage_API.Controllers
                     return NotFound();
                 return Ok(new FrameDTO
                 {
-                    id=f.Id,
+                    id = f.Id,
                     frame_amount = f.FrameAmount,
                     frame_name = f.FrameName,
-                    frame_color_outsite=f.FrameColorOutsite,
-                    frame_color_insite=f.FrameColorInsite,
+                    frame_color_outsite = f.FrameColorOutsite,
+                    frame_color_insite = f.FrameColorInsite,
                 });
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -70,16 +71,16 @@ namespace MyImage_API.Controllers
         [HttpPost]
         public IActionResult Create(CreateFrame model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    Frame data = new Frame {FrameAmount = model.frame_amount, FrameName = model.frame_name, FrameColorOutsite = model.frame_color_outsite, FrameColorInsite = model.frame_color_insite};
+                    Frame data = new Frame { FrameAmount = model.frame_amount, FrameName = model.frame_name, FrameColorOutsite = model.frame_color_outsite, FrameColorInsite = model.frame_color_insite };
                     _context.Frames.Add(data);
                     _context.SaveChanges();
                     return Created($"get-by-id?id={data.Id}",
-                    new FrameDTO 
-                    { 
+                    new FrameDTO
+                    {
                         id = data.Id,
                         frame_amount = data.FrameAmount,
                         frame_name = data.FrameName,
@@ -101,26 +102,28 @@ namespace MyImage_API.Controllers
         [HttpPut]
         public IActionResult Edit(EditFrame model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
-                    Frame frame = new Frame { 
+                    Frame frame = new Frame
+                    {
                         Id = model.id,
                         FrameAmount = model.frame_amount,
                         FrameName = model.frame_name,
                         FrameColorOutsite = model.frame_color_outsite,
-                        FrameColorInsite=model.frame_color_insite   
+                        FrameColorInsite = model.frame_color_insite
 
                     };
-                    if (frame != null) 
-                    { 
+                    if (frame != null)
+                    {
                         _context.Frames.Update(frame);
                         _context.SaveChanges();
                         return Ok("Thay đổi thông tin khung thành công !");
                     }
 
-                }catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     return BadRequest(ex.Message);
                 }
@@ -139,7 +142,8 @@ namespace MyImage_API.Controllers
                 _context.Frames.Remove(frame);
                 _context.SaveChanges();
                 return Ok("Đã xóa khung thành công !");
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

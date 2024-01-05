@@ -11,7 +11,7 @@ public partial class Feedback
 
     public string Message { get; set; } = null!;
 
-    public int Rate { get; set; }
+    public int? Rate { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
