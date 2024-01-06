@@ -6,6 +6,10 @@ namespace MyImage_API.Models.Order
     {
         [Required]
         public int user_id { get; set; }
+
+        [Required]
+        public string email { get; set; }
+
         [Required]
         public string phone { get; set; }
 
@@ -18,6 +22,7 @@ namespace MyImage_API.Models.Order
 
         [Required]
         public int total_amount { get; set;}
+
 
     }
 }

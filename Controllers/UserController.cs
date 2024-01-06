@@ -58,7 +58,7 @@ namespace MyImage_API.Controllers
             List<UserDTO> data = new List<UserDTO>();
             foreach (User c in users)
             {
-                data.Add(new UserDTO { id = c.Id, name = c.Name, email = c.Email, phone = c.Phone, address = c.Address, city = c.City });
+                data.Add(new UserDTO { id = c.Id, name = c.Name, email = c.Email, phone = c.Phone, address = c.Address, city = c.City ,role =c.Role });
             }
             return Ok(users);
         }
@@ -79,6 +79,7 @@ namespace MyImage_API.Controllers
                     Phone = model.phone,
                     Address = model.address,
                     City = model.city,
+                    Role = "user",
                     Password = hashed
                 };
                 _context.Users.Add(user);
@@ -89,8 +90,9 @@ namespace MyImage_API.Controllers
                     email = user.Email,
                     name = user.Name,
                     phone = user.Phone,
-                    city = user.City,
                     address = user.Address,
+                    city = user.City,
+                    role = user.Role,
                     token = GenJWT(user)
                 });
             }
@@ -131,6 +133,7 @@ namespace MyImage_API.Controllers
                     phone = user.Phone,
                     address = user.Address,
                     city = user.City,
+                    role = user.Role,
                     token = GenJWT(user)
                 });
 
@@ -163,8 +166,10 @@ namespace MyImage_API.Controllers
                     email = user.Email,
                     name = user.Name,
                     phone = user.Phone,
+                    address = user.Address,
                     city = user.City,
-                    address = user.Address
+                    role = user.Role,
+                   
                 });
             }
             catch (Exception e)

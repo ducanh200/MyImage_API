@@ -39,11 +39,11 @@ public partial class MyimageContext : DbContext
     {
         modelBuilder.Entity<Admin>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__admin__3213E83FC78D6764");
+            entity.HasKey(e => e.Id).HasName("PK__admin__3213E83F4A3694B0");
 
             entity.ToTable("admin");
 
-            entity.HasIndex(e => e.Email, "UQ__admin__AB6E61641AAEFD11").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__admin__AB6E616408A3AE8B").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Email)
@@ -59,7 +59,7 @@ public partial class MyimageContext : DbContext
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__feedback__3213E83F35EC7A54");
+            entity.HasKey(e => e.Id).HasName("PK__feedback__3213E83FE3905E9A");
 
             entity.ToTable("feedbacks");
 
@@ -70,18 +70,17 @@ public partial class MyimageContext : DbContext
             entity.Property(e => e.Message)
                 .HasMaxLength(255)
                 .HasColumnName("message");
-            entity.Property(e => e.Rate).HasColumnName("rate");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__feedbacks__user___56B3DD81");
+                .HasConstraintName("FK__feedbacks__user___1E3A7A34");
         });
 
         modelBuilder.Entity<Frame>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__frames__3213E83F655EBFA4");
+            entity.HasKey(e => e.Id).HasName("PK__frames__3213E83FD45C4204");
 
             entity.ToTable("frames");
 
@@ -100,7 +99,7 @@ public partial class MyimageContext : DbContext
 
         modelBuilder.Entity<Hanger>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__hangers__3213E83FFB64D7F6");
+            entity.HasKey(e => e.Id).HasName("PK__hangers__3213E83F01ADF5B5");
 
             entity.ToTable("hangers");
 
@@ -113,7 +112,7 @@ public partial class MyimageContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83FCB3C9510");
+            entity.HasKey(e => e.Id).HasName("PK__orders__3213E83FB2C6A5F8");
 
             entity.ToTable("orders");
 
@@ -127,6 +126,9 @@ public partial class MyimageContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
+            entity.Property(e => e.Email)
+                .HasMaxLength(255)
+                .HasColumnName("email");
             entity.Property(e => e.FeedbackId).HasColumnName("feedback_id");
             entity.Property(e => e.Phone)
                 .HasMaxLength(25)
@@ -137,17 +139,17 @@ public partial class MyimageContext : DbContext
 
             entity.HasOne(d => d.Feedback).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.FeedbackId)
-                .HasConstraintName("FK__orders__feedback__589C25F3");
+                .HasConstraintName("FK__orders__feedback__2022C2A6");
 
             entity.HasOne(d => d.User).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__orders__user_id__57A801BA");
+                .HasConstraintName("FK__orders__user_id__1F2E9E6D");
         });
 
         modelBuilder.Entity<OrderImage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__order_im__3213E83FBEAE7C10");
+            entity.HasKey(e => e.Id).HasName("PK__order_im__3213E83FBC69E0AB");
 
             entity.ToTable("order_images");
 
@@ -165,34 +167,32 @@ public partial class MyimageContext : DbContext
             entity.HasOne(d => d.Frame).WithMany(p => p.OrderImages)
                 .HasForeignKey(d => d.FrameId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__order_ima__frame__59904A2C");
+                .HasConstraintName("FK__order_ima__frame__2116E6DF");
 
             entity.HasOne(d => d.Hanger).WithMany(p => p.OrderImages)
                 .HasForeignKey(d => d.HangerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__order_ima__hange__5A846E65");
+                .HasConstraintName("FK__order_ima__hange__220B0B18");
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderImages)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK__order_ima__order__5C6CB6D7");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__order_ima__order__23F3538A");
 
             entity.HasOne(d => d.Size).WithMany(p => p.OrderImages)
                 .HasForeignKey(d => d.SizeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__order_ima__size___5B78929E");
+                .HasConstraintName("FK__order_ima__size___22FF2F51");
         });
 
         modelBuilder.Entity<Size>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__sizes__3213E83F73A6A855");
+            entity.HasKey(e => e.Id).HasName("PK__sizes__3213E83F1F7FC81E");
 
             entity.ToTable("sizes");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.SizeAmount).HasColumnName("size_amount");
-            entity.Property(e => e.SizeHeight)
-                .HasMaxLength(255)
-                .HasColumnName("size_height");
             entity.Property(e => e.SizeName)
                 .HasMaxLength(255)
                 .HasColumnName("size_name");
@@ -203,11 +203,11 @@ public partial class MyimageContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__users__3213E83FEFAA72AE");
+            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F2A185507");
 
             entity.ToTable("users");
 
-            entity.HasIndex(e => e.Email, "UQ__users__AB6E61648AC4BF03").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__users__AB6E61641FBC6ED6").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Address)

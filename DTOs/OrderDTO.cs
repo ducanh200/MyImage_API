@@ -6,6 +6,7 @@
         public int user_id { get; set; }
         public virtual UserDTO user { get; set; }
         public int feedback_id { get; set; }
+        public string email { get; set; }
         public string phone { get; set; }
         public string address { get; set; }
         public string city { get; set; }

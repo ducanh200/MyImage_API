@@ -13,6 +13,9 @@ namespace MyImage_API.Models.Image
         [Required(ErrorMessage = "Vui lòng nhập dữ liệu bắt buộc !")]
         public int size_id { get; set; }
 
+        [Required(ErrorMessage = "Vui lòng nhập dữ liệu bắt buộc !")]
+        public int order_id { get; set; }
+
         [Required(ErrorMessage = "vui lòng nhập file ảnh")]
         public IFormFile thumbnail { get; set; }
 

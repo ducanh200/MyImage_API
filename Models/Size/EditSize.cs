@@ -16,7 +16,5 @@ namespace MyImage_API.Models.Size
         [Required]
         public string size_width { get; set; }
 
-        [Required]
-        public string size_height { get; set; }
     }
 }

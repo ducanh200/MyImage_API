@@ -19,7 +19,7 @@ public partial class User
 
     public string City { get; set; } = null!;
 
-    public string? Role { get; set; }
+    public string Role { get; set; } = null!;
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 

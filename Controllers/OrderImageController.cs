@@ -23,14 +23,14 @@ namespace MyImage_API.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<OrderImage> orderImages = _context.OrderImages.Include(p => p.Size).Include(p => p.Frame).Include(p => p.Hanger).ToList();
+            List<OrderImage> orderImages = _context.OrderImages.Include(p => p.Size).Include(p => p.Frame).Include(p => p.Hanger).Include(p =>p.Order).ToList();
             if (orderImages.Count == 0)
             {
                 return Ok("Không dữ liệu !");
             }
             List<OrderImageDTO> data = new List<OrderImageDTO>();
             foreach (OrderImage n in orderImages)
-            {
+            {   
                 data.Add(new OrderImageDTO
                 {
                     id = n.Id,
@@ -39,10 +39,12 @@ namespace MyImage_API.Controllers
                     hanger_id = n.HangerId,
                     hanger = new HangerDTO { id = n.Hanger.Id, hanger_amount = n.Hanger.HangerAmount, hanger_name = n.Hanger.HangerName },
                     size_id = n.SizeId,
-                    size = new SizeDTO { id = n.Size.Id, size_amount = n.Size.SizeAmount, size_name = n.Size.SizeName, size_width = n.Size.SizeWidth, size_height = n.Size.SizeHeight },
+                    size = new SizeDTO { id = n.Size.Id, size_amount = n.Size.SizeAmount, size_name = n.Size.SizeName, size_width = n.Size.SizeWidth },
+                    order_id = n.OrderId,
+                    order = new OrderDTO { id = n.Order.Id , user_id = n.Order.UserId , email = n.Order.Email, phone = n.Order.Phone, address = n.Order.Address, city = n.Order.City, total_amount = n.Order.TotalAmount, status = n.Order.Status, created_at = n.Order.CreatedAt },
                     thumbnail = n.Thumbnail,
                     quantity = n.Quantity,
-                    amount = n.Amount,
+                    amount = n.Amount
                 });
             }
             return Ok(data);
@@ -55,18 +57,23 @@ namespace MyImage_API.Controllers
         {
             try
             {
-                OrderImage i = _context.OrderImages.Where(i => i.Id == id).First();
+                OrderImage i = _context.OrderImages.Where(i => i.Id == id).Include(p => p.Size).Include(p => p.Frame).Include(p => p.Hanger).Include(p => p.Order).First();
                 if (i == null)
                     return NotFound();
                 return Ok(new OrderImageDTO
                 {
                     id = i.Id,
                     frame_id = i.FrameId,
+                    frame = new FrameDTO { id = i.Frame.Id, frame_amount = i.Frame.FrameAmount, frame_name = i.Frame.FrameName, frame_color_outsite = i.Frame.FrameColorOutsite, frame_color_insite = i.Frame.FrameColorInsite },
                     hanger_id = i.HangerId,
+                    hanger = new HangerDTO { id = i.Hanger.Id, hanger_amount = i.Hanger.HangerAmount, hanger_name = i.Hanger.HangerName },
                     size_id = i.SizeId,
+                    size = new SizeDTO { id = i.Size.Id, size_amount = i.Size.SizeAmount, size_name = i.Size.SizeName, size_width = i.Size.SizeWidth },
+                    order_id = i .OrderId,
+                    order = new OrderDTO { id = i.Order.Id, user_id = i.Order.UserId, email = i.Order.Email, phone = i.Order.Phone, address = i.Order.Address, city = i.Order.City, total_amount = i.Order.TotalAmount, status = i.Order.Status, created_at = i.Order.CreatedAt },
                     thumbnail = i.Thumbnail,
                     quantity = i.Quantity,
-                    amount = i.Amount,
+                    amount = i.Amount
                 });
 
             }
@@ -107,6 +114,7 @@ namespace MyImage_API.Controllers
                             FrameId = model.frame_id,
                             HangerId = model.hanger_id,
                             SizeId = model.size_id,
+                            OrderId = model.order_id,
                             Thumbnail = url,
                             Quantity = model.quantity,
                             Amount = model.amount,
@@ -121,6 +129,7 @@ namespace MyImage_API.Controllers
                             frame_id = image.FrameId,
                             hanger_id = image.HangerId,
                             size_id = image.SizeId,
+                            order_id = image.OrderId,
                             thumbnail = image.Thumbnail,
                             quantity = image.Quantity,
                             amount = image.Amount,
@@ -145,7 +154,7 @@ namespace MyImage_API.Controllers
         }
 
 
-        [HttpPut]
+       /* [HttpPut]
         public IActionResult Update([FromForm] EditImage model)
         {
             if (ModelState.IsValid)
@@ -227,6 +236,6 @@ namespace MyImage_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
+        }*/
     }
 }

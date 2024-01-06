@@ -80,8 +80,6 @@ namespace MyImage_API.Controllers
         [HttpPost]
         public IActionResult Create(CreateFeedback model)
         {
-            if (ModelState.IsValid)
-            {
                 try
                 {
                     Feedback data = new Feedback
@@ -105,10 +103,8 @@ namespace MyImage_API.Controllers
                 {
                     return BadRequest(ex.Message);
                 }
-            }
             var msgs = ModelState.Values.SelectMany(v => v.Errors)
                    .Select(v => v.ErrorMessage);
-            return BadRequest(string.Join(", ", msgs));
         }
 
         [HttpPut]

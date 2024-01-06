@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MyImage_API.DTOs;
 using MyImage_API.Entities;
 using MyImage_API.Models.Order;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MyImage_API.Controllers
 {
@@ -23,29 +24,37 @@ namespace MyImage_API.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Order> orders = _context.Orders.Include(p => p.User).ToList();
-            if (orders.Count == 0)
-            {
-                return BadRequest("KHông có cơ sở dữ liệu !");
-            }
-            List<OrderDTO> data = new List<OrderDTO>();
-            foreach (Order o in orders)
-            {
-                data.Add(new OrderDTO
+            try {
+                List<Order> orders = _context.Orders.Include(p => p.User).ToList();
+                if (orders.Count == 0)
                 {
-                    id = o.Id,
-                    user_id = o.User.Id,
-                    user = new UserDTO { id = o.User.Id, name = o.User.Name, email = o.User.Email, phone = o.User.Phone, address = o.User.Address, city = o.User.City },
-                    phone = o.Phone,
-                    address = o.Address,
-                    city = o.City,
-                    total_amount = o.TotalAmount,
-                    status = o.Status,
-                    created_at = Convert.ToDateTime(o.CreatedAt)
-                });
-            }
+                    return BadRequest("KHông có cơ sở dữ liệu !");
+                }
+                List<OrderDTO> data = new List<OrderDTO>();
+                foreach (Order o in orders)
+                {
+                    data.Add(new OrderDTO
+                    {
+                        id = o.Id,
+                        user_id = o.User.Id,
+                        user = new UserDTO { id = o.User.Id, name = o.User.Name, email = o.User.Email, phone = o.User.Phone, address = o.User.Address, city = o.User.City },
+                        email = o.User.Email,
+                        phone = o.Phone,
+                        address = o.Address,
+                        city = o.City,
+                        total_amount = o.TotalAmount,
+                        status = o.Status,
+                        created_at = Convert.ToDateTime(o.CreatedAt)
+                    });
+                }
 
-            return Ok(orders);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpGet]
@@ -64,6 +73,7 @@ namespace MyImage_API.Controllers
                     user_id = n.UserId,
                     user = new UserDTO { id = n.User.Id, name = n.User.Name, email = n.User.Email ,phone = n.User.Phone},
                     phone = n.Phone,
+                    email = n.Email,
                     address = n.Address,
                     city = n.City,
                     total_amount = n.TotalAmount,
@@ -89,15 +99,16 @@ namespace MyImage_API.Controllers
                     {
                         UserId = model.user_id,
                         Phone = model.phone,
+                        Email = model.email,
                         Address = model.address,
                         City = model.city,
                         TotalAmount = model.total_amount,
                         Status = 1,
                         CreatedAt = DateTime.UtcNow
                     };
+
                     _context.Orders.Add(newOrder);
                     _context.SaveChanges();
-
 
                     return Ok(newOrder);
                 }
@@ -106,8 +117,8 @@ namespace MyImage_API.Controllers
                     return BadRequest("Đã xảy ra lỗi khi tạo order: " + ex.Message);
                 }
             }
-
-            return BadRequest("Dữ liệu không hợp lệ");
+            var msgs = ModelState.Values.SelectMany(v => v.Errors).Select(v => v.ErrorMessage);
+            return BadRequest(string.Join(" | ", msgs));
         }
 
 
@@ -117,13 +128,10 @@ namespace MyImage_API.Controllers
         {
             try
             {
-                // Lấy đơn hàng từ cơ sở dữ liệu
                 Order existingOrder = _context.Orders.Find(Id);
 
-                // Kiểm tra xem đơn hàng tồn tại không (chưa hoàn thành)
                 if (existingOrder != null)
                 {
-                    // Cập nhật trạng thái của đơn hàng
                     existingOrder.Status = existingOrder.Status + 1;
                     _context.SaveChanges();
 
@@ -144,13 +152,10 @@ namespace MyImage_API.Controllers
         {
             try
             {
-                // Lấy đơn hàng từ cơ sở dữ liệu
                 Order existingOrder = _context.Orders.Find(Id);
 
-                // Kiểm tra xem đơn hàng tồn tại không (chưa hoàn thành)
                 if (existingOrder != null)
                 {
-                    // Cập nhật trạng thái của đơn hàng
                     existingOrder.Status = 0;
                     _context.SaveChanges();
 
@@ -164,9 +169,5 @@ namespace MyImage_API.Controllers
                 return BadRequest("Đã xảy ra lỗi khi cập nhật trạng thái đơn hàng: " + ex.Message);
             }
         }
-
-
-
-
     }
 }

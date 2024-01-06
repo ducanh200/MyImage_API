@@ -29,7 +29,7 @@ namespace MyImage_API.Controllers
             List<SizeDTO> data = new List<SizeDTO>();
             foreach (Size s in sizes)
             {
-                data.Add(new SizeDTO { id = s.Id, size_name = s.SizeName, size_amount = s.SizeAmount, size_width = s.SizeWidth, size_height = s.SizeHeight });
+                data.Add(new SizeDTO { id = s.Id, size_name = s.SizeName, size_amount = s.SizeAmount, size_width = s.SizeWidth });
             }
             return Ok(sizes);
         }
@@ -44,7 +44,7 @@ namespace MyImage_API.Controllers
                 Size s = _context.Sizes.Find(id);
                 if (s != null)
                 {
-                    return Ok(new SizeDTO { id = s.Id, size_name = s.SizeName, size_amount = s.SizeAmount, size_width = s.SizeWidth, size_height = s.SizeHeight });
+                    return Ok(new SizeDTO { id = s.Id, size_name = s.SizeName, size_amount = s.SizeAmount, size_width = s.SizeWidth });
                 }
             }
             catch (Exception ex)
@@ -62,11 +62,11 @@ namespace MyImage_API.Controllers
             {
                 try
                 {
-                    Size data = new Size { SizeName = model.size_name, SizeAmount = model.size_amount, SizeWidth = model.size_width, SizeHeight = model.size_height };
+                    Size data = new Size { SizeName = model.size_name, SizeAmount = model.size_amount, SizeWidth = model.size_width};
                     _context.Sizes.Add(data);
                     _context.SaveChanges();
                     return Created($"get-by-id?id={data.Id}",
-                    new SizeDTO { id = data.Id, size_name = data.SizeName, size_amount = data.SizeAmount, size_width = data.SizeWidth, size_height = data.SizeHeight });
+                    new SizeDTO { id = data.Id, size_name = data.SizeName, size_amount = data.SizeAmount, size_width = data.SizeWidth});
                 }
                 catch (Exception ex)
                 {
@@ -85,7 +85,7 @@ namespace MyImage_API.Controllers
             {
                 try
                 {
-                    Size size = new Size { Id = model.id, SizeName = model.size_name, SizeAmount = model.size_amount, SizeWidth = model.size_width, SizeHeight = model.size_height };
+                    Size size = new Size { Id = model.id, SizeName = model.size_name, SizeAmount = model.size_amount, SizeWidth = model.size_width };
                     if (size != null)
                     {
                         _context.Sizes.Update(size);
