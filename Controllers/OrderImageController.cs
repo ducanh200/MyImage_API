@@ -52,36 +52,51 @@ namespace MyImage_API.Controllers
         }
 
         [HttpGet]
-        [Route("get-by-id")]
-        public IActionResult Get(int id)
+        [Route("get-by-order-id")]
+        public IActionResult GetByOrderId(int orderId)
         {
             try
             {
-                OrderImage i = _context.OrderImages.Where(i => i.Id == id).Include(p => p.Size).Include(p => p.Frame).Include(p => p.Hanger).Include(p => p.Order).First();
-                if (i == null)
-                    return NotFound();
-                return Ok(new OrderImageDTO
-                {
-                    id = i.Id,
-                    frame_id = i.FrameId,
-                    frame = new FrameDTO { id = i.Frame.Id, frame_amount = i.Frame.FrameAmount, frame_name = i.Frame.FrameName, frame_color_outsite = i.Frame.FrameColorOutsite, frame_color_insite = i.Frame.FrameColorInsite },
-                    hanger_id = i.HangerId,
-                    hanger = new HangerDTO { id = i.Hanger.Id, hanger_amount = i.Hanger.HangerAmount, hanger_name = i.Hanger.HangerName },
-                    size_id = i.SizeId,
-                    size = new SizeDTO { id = i.Size.Id, size_amount = i.Size.SizeAmount, size_name = i.Size.SizeName, size_width = i.Size.SizeWidth },
-                    order_id = i .OrderId,
-                    order = new OrderDTO { id = i.Order.Id, user_id = i.Order.UserId, email = i.Order.Email, phone = i.Order.Phone, address = i.Order.Address, city = i.Order.City, total_amount = i.Order.TotalAmount, status = i.Order.Status, created_at = i.Order.CreatedAt },
-                    thumbnail = i.Thumbnail,
-                    quantity = i.Quantity,
-                    amount = i.Amount
-                });
+                List<OrderImage> orderImages = _context.OrderImages
+                    .Where(i => i.OrderId == orderId)
+                    .Include(p => p.Size)
+                    .Include(p => p.Frame)
+                    .Include(p => p.Hanger)
+                    .Include(p => p.Order)
+                    .ToList();
 
+                if (orderImages.Count == 0)
+                    return NotFound();
+
+                List<OrderImageDTO> data = new List<OrderImageDTO>();
+
+                foreach (OrderImage i in orderImages)
+                {
+                    data.Add(new OrderImageDTO
+                    {
+                        id = i.Id,
+                        frame_id = i.FrameId,
+                        frame = new FrameDTO { id = i.Frame.Id, frame_amount = i.Frame.FrameAmount, frame_name = i.Frame.FrameName, frame_color_outsite = i.Frame.FrameColorOutsite, frame_color_insite = i.Frame.FrameColorInsite },
+                        hanger_id = i.HangerId,
+                        hanger = new HangerDTO { id = i.Hanger.Id, hanger_amount = i.Hanger.HangerAmount, hanger_name = i.Hanger.HangerName },
+                        size_id = i.SizeId,
+                        size = new SizeDTO { id = i.Size.Id, size_amount = i.Size.SizeAmount, size_name = i.Size.SizeName, size_width = i.Size.SizeWidth },
+                        order_id = i.OrderId,
+                        order = new OrderDTO { id = i.Order.Id, user_id = i.Order.UserId, email = i.Order.Email, phone = i.Order.Phone, address = i.Order.Address, city = i.Order.City, total_amount = i.Order.TotalAmount, status = i.Order.Status, created_at = i.Order.CreatedAt },
+                        thumbnail = i.Thumbnail,
+                        quantity = i.Quantity,
+                        amount = i.Amount
+                    });
+                }
+
+                return Ok(data);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
 
 
         [HttpPost]

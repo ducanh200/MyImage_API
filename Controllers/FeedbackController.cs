@@ -24,29 +24,38 @@ namespace MyImage_API.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            List<Feedback> feedbacks = _context.Feedbacks.Include(p => p.User).ToList();
-            if (feedbacks.Count == 0)
+            try
             {
-                return Ok("Không có dữ liệu nào được ghi !");
-            }
-            List<FeedbackDTO> data = new List<FeedbackDTO>();
-            foreach (Feedback m in feedbacks)
-            {
-                data.Add(new FeedbackDTO 
-                { 
-                    id = m.Id, 
-                    user_id = m.UserId, 
-                    user = new UserDTO { 
-                        id = m.User.Id,
-                        name = m.User.Name,
-                        email = m.User.Email 
-                    },
-                    message = m.Message, 
-                    created_at = Convert.ToDateTime(m.CreatedAt)
-                });
-            }
+                List<Feedback> feedbacks = _context.Feedbacks.Include(p => p.User).ToList();
+                if (feedbacks.Count == 0)
+                {
+                    return Ok("Không có dữ liệu nào được ghi !");
+                }
+                List<FeedbackDTO> data = new List<FeedbackDTO>();
+                foreach (Feedback m in feedbacks)
+                {
+                    data.Add(new FeedbackDTO
+                    {
+                        id = m.Id,
+                        user_id = m.UserId,
+                        user = new UserDTO
+                        {
+                            id = m.User.Id,
+                            name = m.User.Name,
+                            email = m.User.Email
+                        },
+                        message = m.Message,
+                        created_at = Convert.ToDateTime(m.CreatedAt)
+                    });
+                }
 
-            return Ok(feedbacks);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
 
@@ -80,6 +89,8 @@ namespace MyImage_API.Controllers
         [HttpPost]
         public IActionResult Create(CreateFeedback model)
         {
+            if (ModelState.IsValid)
+            {
                 try
                 {
                     Feedback data = new Feedback
@@ -103,8 +114,10 @@ namespace MyImage_API.Controllers
                 {
                     return BadRequest(ex.Message);
                 }
+            }
             var msgs = ModelState.Values.SelectMany(v => v.Errors)
                    .Select(v => v.ErrorMessage);
+            return BadRequest(string.Join(", ", msgs));
         }
 
         [HttpPut]
