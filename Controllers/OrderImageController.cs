@@ -100,29 +100,13 @@ namespace MyImage_API.Controllers
 
 
         [HttpPost]
-        public IActionResult Create([FromForm] CreateImage model)
+        public IActionResult Create(CreateImage model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (model.thumbnail != null && model.thumbnail.Length > 0)
-                    {
-                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnail.FileName);
-                        var filePath = Path.Combine("uploads", fileName);
 
-                        var absolutePath = Path.Combine(_environment.WebRootPath, filePath);
-
-                        using (var fileStream = new FileStream(absolutePath, FileMode.Create))
-                        {
-                            model.thumbnail.CopyTo(fileStream);
-                        }
-
-                        string url = $"{Request.Scheme}://{Request.Host}/uploads/{fileName}";
-
-                        var frame = _context.Frames.Find(model.frame_id);
-                        var hanger = _context.Hangers.Find(model.hanger_id);
-                        var size = _context.Sizes.Find(model.size_id);
 
                         OrderImage image = new OrderImage
                         {
@@ -130,7 +114,7 @@ namespace MyImage_API.Controllers
                             HangerId = model.hanger_id,
                             SizeId = model.size_id,
                             OrderId = model.order_id,
-                            Thumbnail = url,
+                            Thumbnail = model.thumbnail,
                             Quantity = model.quantity,
                             Amount = model.amount,
                         };
@@ -150,12 +134,7 @@ namespace MyImage_API.Controllers
                             amount = image.Amount,
                         };
 
-                        return Created(url, orderImageDTO);
-                    }
-                    else
-                    {
-                        return BadRequest("Vui lòng chọn file ảnh");
-                    }
+                    return Ok(orderImageDTO);
 
                 }
                 catch (Exception ex)

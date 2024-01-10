@@ -17,7 +17,7 @@ namespace MyImage_API.Models.Image
         public int order_id { get; set; }
 
         [Required(ErrorMessage = "vui lòng nhập file ảnh")]
-        public IFormFile thumbnail { get; set; }
+        public string thumbnail { get; set; }
 
         [Required(ErrorMessage = "Vui lòng nhập số lượng ảnh !")]
         public int quantity { get; set; }

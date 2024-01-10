@@ -23,6 +23,8 @@ public partial class MyimageContext : DbContext
 
     public virtual DbSet<Hanger> Hangers { get; set; }
 
+    public virtual DbSet<ImageUrl> ImageUrls { get; set; }
+
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderImage> OrderImages { get; set; }
@@ -108,6 +110,18 @@ public partial class MyimageContext : DbContext
             entity.Property(e => e.HangerName)
                 .HasMaxLength(255)
                 .HasColumnName("hanger_name");
+        });
+
+        modelBuilder.Entity<ImageUrl>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__image_ur__3213E83FBE5CBBD5");
+
+            entity.ToTable("image_url");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Thumbnail)
+                .HasMaxLength(255)
+                .HasColumnName("thumbnail");
         });
 
         modelBuilder.Entity<Order>(entity =>
