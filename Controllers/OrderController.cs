@@ -169,5 +169,304 @@ namespace MyImage_API.Controllers
                 return BadRequest("Đã xảy ra lỗi khi cập nhật trạng thái đơn hàng: " + ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("get-order-cancelled")]
+        public IActionResult GetOrdersCancelled()
+        {
+            try
+            {
+                List<Order> orders = _context.Orders
+                    .Where(o => o.Status == 0)
+                    .Include(o => o.User)
+                    .ToList();
+
+                if (orders.Count == 0)
+                {
+                    return BadRequest("No orders found with status 0.");
+                }
+
+                List<OrderDTO> data = new List<OrderDTO>();
+                foreach (Order o in orders)
+                {
+                    data.Add(new OrderDTO
+                    {
+                        id = o.Id,
+                        user_id = o.User.Id,
+                        user = new UserDTO { id = o.User.Id, name = o.User.Name, email = o.User.Email, phone = o.User.Phone, address = o.User.Address, city = o.User.City },
+                        email = o.User.Email,
+                        phone = o.Phone,
+                        address = o.Address,
+                        city = o.City,
+                        total_amount = o.TotalAmount,
+                        status = o.Status,
+                        created_at = Convert.ToDateTime(o.CreatedAt)
+                    });
+                }
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving orders with status 0: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Route("get-order-waitting")]
+        public IActionResult GetOrdersWaitting()
+        {
+            try
+            {
+                List<Order> orders = _context.Orders
+                    .Where(o => o.Status == 1)
+                    .Include(o => o.User)
+                    .ToList();
+
+                if (orders.Count == 0)
+                {
+                    return BadRequest("No orders found with status 1.");
+                }
+
+                List<OrderDTO> data = new List<OrderDTO>();
+                foreach (Order o in orders)
+                {
+                    data.Add(new OrderDTO
+                    {
+                        id = o.Id,
+                        user_id = o.User.Id,
+                        user = new UserDTO { id = o.User.Id, name = o.User.Name, email = o.User.Email, phone = o.User.Phone, address = o.User.Address, city = o.User.City },
+                        email = o.User.Email,
+                        phone = o.Phone,
+                        address = o.Address,
+                        city = o.City,
+                        total_amount = o.TotalAmount,
+                        status = o.Status,
+                        created_at = Convert.ToDateTime(o.CreatedAt)
+                    });
+                }
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving orders with status 1: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Route("get-order-confirmed")]
+        public IActionResult GetOrdersConfirmed()
+        {
+            try
+            {
+                List<Order> orders = _context.Orders
+                    .Where(o => o.Status == 2)
+                    .Include(o => o.User)
+                    .ToList();
+
+                if (orders.Count == 0)
+                {
+                    return BadRequest("No orders found with status 2.");
+                }
+
+                List<OrderDTO> data = new List<OrderDTO>();
+                foreach (Order o in orders)
+                {
+                    data.Add(new OrderDTO
+                    {
+                        id = o.Id,
+                        user_id = o.User.Id,
+                        user = new UserDTO { id = o.User.Id, name = o.User.Name, email = o.User.Email, phone = o.User.Phone, address = o.User.Address, city = o.User.City },
+                        email = o.User.Email,
+                        phone = o.Phone,
+                        address = o.Address,
+                        city = o.City,
+                        total_amount = o.TotalAmount,
+                        status = o.Status,
+                        created_at = Convert.ToDateTime(o.CreatedAt)
+                    });
+                }
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving orders with status 2: {ex.Message}");
+            }
+        }
+
+
+        [HttpGet]
+        [Route("get-order-shipping")]
+        public IActionResult GetOrdersShipping()
+        {
+            try
+            {
+                List<Order> orders = _context.Orders
+                    .Where(o => o.Status == 3)
+                    .Include(o => o.User)
+                    .ToList();
+
+                if (orders.Count == 0)
+                {
+                    return BadRequest("No orders found with status 3.");
+                }
+
+                List<OrderDTO> data = new List<OrderDTO>();
+                foreach (Order o in orders)
+                {
+                    data.Add(new OrderDTO
+                    {
+                        id = o.Id,
+                        user_id = o.User.Id,
+                        user = new UserDTO { id = o.User.Id, name = o.User.Name, email = o.User.Email, phone = o.User.Phone, address = o.User.Address, city = o.User.City },
+                        email = o.User.Email,
+                        phone = o.Phone,
+                        address = o.Address,
+                        city = o.City,
+                        total_amount = o.TotalAmount,
+                        status = o.Status,
+                        created_at = Convert.ToDateTime(o.CreatedAt)
+                    });
+                }
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving orders with status 3: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Route("get-order-shipped")]
+        public IActionResult GetOrdersShipped()
+        {
+            try
+            {
+                List<Order> orders = _context.Orders
+                    .Where(o => o.Status == 4)
+                    .Include(o => o.User)
+                    .ToList();
+
+                if (orders.Count == 0)
+                {
+                    return BadRequest("No orders found with status 4.");
+                }
+
+                List<OrderDTO> data = new List<OrderDTO>();
+                foreach (Order o in orders)
+                {
+                    data.Add(new OrderDTO
+                    {
+                        id = o.Id,
+                        user_id = o.User.Id,
+                        user = new UserDTO { id = o.User.Id, name = o.User.Name, email = o.User.Email, phone = o.User.Phone, address = o.User.Address, city = o.User.City },
+                        email = o.User.Email,
+                        phone = o.Phone,
+                        address = o.Address,
+                        city = o.City,
+                        total_amount = o.TotalAmount,
+                        status = o.Status,
+                        created_at = Convert.ToDateTime(o.CreatedAt)
+                    });
+                }
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving orders with status 4: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Route("get-order-successed")]
+        public IActionResult GetOrdersSuccessed()
+        {
+            try
+            {
+                List<Order> orders = _context.Orders
+                    .Where(o => o.Status == 5)
+                    .Include(o => o.User)
+                    .ToList();
+
+                if (orders.Count == 0)
+                {
+                    return BadRequest("No orders found with status 5.");
+                }
+
+                List<OrderDTO> data = new List<OrderDTO>();
+                foreach (Order o in orders)
+                {
+                    data.Add(new OrderDTO
+                    {
+                        id = o.Id,
+                        user_id = o.User.Id,
+                        user = new UserDTO { id = o.User.Id, name = o.User.Name, email = o.User.Email, phone = o.User.Phone, address = o.User.Address, city = o.User.City },
+                        email = o.User.Email,
+                        phone = o.Phone,
+                        address = o.Address,
+                        city = o.City,
+                        total_amount = o.TotalAmount,
+                        status = o.Status,
+                        created_at = Convert.ToDateTime(o.CreatedAt)
+                    });
+                }
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving orders with status 5: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        [Route("today-orders")]
+        public IActionResult TodayOrders()
+        {
+            try
+            {
+                DateTime today = DateTime.Today;
+                DateTime tomorrow = today.AddDays(1);
+
+                List<Order> orders = _context.Orders
+                    .Where(o => o.CreatedAt >= today && o.CreatedAt < tomorrow)
+                    .Include(o => o.User)
+                    .ToList();
+
+                if (orders.Count == 0)
+                {
+                    return BadRequest("No orders found created today.");
+                }
+
+                List<OrderDTO> data = new List<OrderDTO>();
+                foreach (Order o in orders)
+                {
+                    data.Add(new OrderDTO
+                    {
+                        id = o.Id,
+                        user_id = o.User.Id,
+                        user = new UserDTO { id = o.User.Id, name = o.User.Name, email = o.User.Email, phone = o.User.Phone, address = o.User.Address, city = o.User.City },
+                        email = o.User.Email,
+                        phone = o.Phone,
+                        address = o.Address,
+                        city = o.City,
+                        total_amount = o.TotalAmount,
+                        status = o.Status,
+                        created_at = Convert.ToDateTime(o.CreatedAt)
+                    });
+                }
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving orders created today: {ex.Message}");
+            }
+        }
+
     }
 }

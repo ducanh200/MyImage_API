@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "H+xNZ0oXBDB0Xir5IypJpU3IJRoVLA7JbPA+HStVGRw=",
+  "Hash": "BiIDLgU+vUkoCq0B2HDYa/u6FzHcqxvzZOtg1IAwwo0=",
   "Source": "MyImage_API",
   "BasePath": "_content/MyImage_API",
   "Mode": "Default",
@@ -170,6 +170,23 @@
       "OriginalItemSpec": "wwwroot\\Uploads\\3dc38a74-9f54-4e07-a50d-74376a79064f.jpg"
     },
     {
+      "Identity": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\Uploads\\51f40075-a0ca-479a-9ae9-9c1e5d4a822e.jpg",
+      "SourceId": "MyImage_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\",
+      "BasePath": "_content/MyImage_API",
+      "RelativePath": "Uploads/51f40075-a0ca-479a-9ae9-9c1e5d4a822e.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\51f40075-a0ca-479a-9ae9-9c1e5d4a822e.jpg"
+    },
+    {
       "Identity": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\Uploads\\52f6385f-9482-4bc2-a05b-7faf8a0eacc8.jpg",
       "SourceId": "MyImage_API",
       "SourceType": "Discovered",
@@ -202,6 +219,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Uploads\\76ffce0e-574c-4046-b5bb-1fe8d1eea1a3.jpg"
+    },
+    {
+      "Identity": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\Uploads\\a161485c-aefa-430b-80bd-13bfc61e33a6.jpg",
+      "SourceId": "MyImage_API",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\",
+      "BasePath": "_content/MyImage_API",
+      "RelativePath": "Uploads/a161485c-aefa-430b-80bd-13bfc61e33a6.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Uploads\\a161485c-aefa-430b-80bd-13bfc61e33a6.jpg"
     },
     {
       "Identity": "D:\\Project_end_sem_3\\MyImage_API\\MyImage_API\\wwwroot\\Uploads\\a564bb49-04ba-4618-851a-afc9898f7199.jpg",
