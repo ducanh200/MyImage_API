@@ -25,7 +25,7 @@ namespace MyImage_API.Controllers
         public IActionResult Index()
         {
             try {
-                List<Order> orders = _context.Orders.Include(p => p.User).ToList();
+                List<Order> orders = _context.Orders.Include(p => p.User).OrderByDescending(o => o.Id).ToList();
                 if (orders.Count == 0)
                 {
                     return BadRequest("KHông có cơ sở dữ liệu !");
@@ -179,6 +179,7 @@ namespace MyImage_API.Controllers
                 List<Order> orders = _context.Orders
                     .Where(o => o.Status == 0)
                     .Include(o => o.User)
+                    .OrderByDescending(o => o.Id)
                     .ToList();
 
                 if (orders.Count == 0)
@@ -221,6 +222,7 @@ namespace MyImage_API.Controllers
                 List<Order> orders = _context.Orders
                     .Where(o => o.Status == 1)
                     .Include(o => o.User)
+                    .OrderByDescending(o => o.Id)
                     .ToList();
 
                 if (orders.Count == 0)
@@ -263,6 +265,7 @@ namespace MyImage_API.Controllers
                 List<Order> orders = _context.Orders
                     .Where(o => o.Status == 2)
                     .Include(o => o.User)
+                    .OrderByDescending(o => o.Id)
                     .ToList();
 
                 if (orders.Count == 0)
@@ -306,6 +309,7 @@ namespace MyImage_API.Controllers
                 List<Order> orders = _context.Orders
                     .Where(o => o.Status == 3)
                     .Include(o => o.User)
+                    .OrderByDescending(o => o.Id)
                     .ToList();
 
                 if (orders.Count == 0)
@@ -348,6 +352,7 @@ namespace MyImage_API.Controllers
                 List<Order> orders = _context.Orders
                     .Where(o => o.Status == 4)
                     .Include(o => o.User)
+                    .OrderByDescending(o => o.Id)
                     .ToList();
 
                 if (orders.Count == 0)
@@ -390,6 +395,7 @@ namespace MyImage_API.Controllers
                 List<Order> orders = _context.Orders
                     .Where(o => o.Status == 5)
                     .Include(o => o.User)
+                    .OrderByDescending(o => o.Id)
                     .ToList();
 
                 if (orders.Count == 0)
@@ -435,6 +441,7 @@ namespace MyImage_API.Controllers
                 List<Order> orders = _context.Orders
                     .Where(o => o.CreatedAt >= today && o.CreatedAt < tomorrow)
                     .Include(o => o.User)
+                    .OrderByDescending(o => o.Id)
                     .ToList();
 
                 if (orders.Count == 0)
@@ -684,6 +691,54 @@ namespace MyImage_API.Controllers
         [HttpGet]
         [Route("month12-orders-amount")]
         public IActionResult Month12OrdersAmount() => MonthOrdersAmount(12);
+
+
+        [HttpGet]
+        [Route("get-orders-days-ago")]
+        public IActionResult GetOrdersDaysAgo(int daysAgo)
+        {
+            try
+            {
+                DateTime startDate = DateTime.UtcNow.Date.AddDays(-daysAgo);
+                DateTime endDate = DateTime.UtcNow.Date.AddDays(-(daysAgo - 1));
+
+                List<Order> orders = _context.Orders
+                    .Where(o => o.CreatedAt >= startDate && o.CreatedAt < endDate)
+                    .Include(o => o.User)
+                    .OrderByDescending(o => o.Id)
+                    .ToList();
+
+                if (orders.Count == 0)
+                {
+                    return BadRequest($"No orders found created {daysAgo} days ago.");
+                }
+
+                List<OrderDTO> data = new List<OrderDTO>();
+                foreach (Order o in orders)
+                {
+                    data.Add(new OrderDTO
+                    {
+                        id = o.Id,
+                        user_id = o.User.Id,
+                        user = new UserDTO { id = o.User.Id, name = o.User.Name, email = o.User.Email, phone = o.User.Phone, address = o.User.Address, city = o.User.City },
+                        email = o.User.Email,
+                        phone = o.Phone,
+                        address = o.Address,
+                        city = o.City,
+                        total_amount = o.TotalAmount,
+                        status = o.Status,
+                        created_at = Convert.ToDateTime(o.CreatedAt)
+                    });
+                }
+
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error retrieving orders created {daysAgo} days ago: {ex.Message}");
+            }
+        }
+
 
     }
 }
